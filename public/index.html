@@ -1,36 +1,21 @@
 <html>
     <head>
-        <title>Chat App</title>
+        <title>Chat APP</title>
+        <link rel="icon" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <h1>Chat APP</h1>
-
-        <div id="messages">
+        <div class="centered-form">
+            <div class="centered-form__box">
+                <h1>JOIN</h1>
+                <form action="/chat.html">
+                    <label>Display Name</label>
+                    <input type="text" name="username" placeholder="username" autocomplete="off" required>
+                    <label>Room</label>
+                    <input type="text" name="room" placeholder="room" autocomplete="off" required>
+                    <button>JOIN</button>
+                </form>
+            </div>
         </div>
-
-
-        <form id="message_form">
-            <input type='text' id="inputmessage" name="message">
-            <button id="button">Submit</button>
-        </form>
-
-        <button id="location">Send Location</button>
-        
-
-        <script id="message-template" type="text/html">
-            <div>
-                <p>{{createdAt}} - {{message}}</p>
-            </div>
-        </script>
-
-        <script id="location-message-template" type="text/html">
-            <div>
-                <p>{{createdAt}} - <a href={{message}}>My Current Location</a></p>
-            </div>
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.0.1/mustache.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/chat.js"></script>
     </body>
 </html>

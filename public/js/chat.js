@@ -2,29 +2,49 @@ var socket=io()
 var messageformbutton=document.getElementById("button");
 var messageforminput=document.getElementById("inputmessage");
 var messageform=document.getElementById("message_form");
-var sendlocationbutton=document.getElementById("location")
+var sendlocationbutton=document.getElementById("send-location")
 var locationmessagetemplate=document.getElementById('location-message-template').innerHTML;
 var messagetemplate=document.getElementById('message-template').innerHTML;
 var messages=document.getElementById('messages');
+var sidebartemplate=document.getElementById('sidebar-template').innerHTML;
+var sidebar=document.getElementById('sidebar')
 
-socket.on("message",function(message)
+var {username , room}=Qs.parse(location.search,{ignoreQueryPrefix:true});
+
+socket.on("message",function(username,message)
 {
     var html=Mustache.render(messagetemplate,
         {
+            username:username,
             message:message.text,
             createdAt:moment(message.createdAt).format("hh:mm a")
         })
     messages.insertAdjacentHTML('beforeend',html)
+    autoscroll();
 })
 
-socket.on("locationmessage",function(url)
+
+socket.on("locationmessage",function(username,url)
 {
     var html=Mustache.render(locationmessagetemplate,
         {
+            username:username,
             message:url.text,
             createdAt:moment(url.createdAt).format("hh:mm a")
         })
     messages.insertAdjacentHTML('beforeend',html)
+    autoscroll();
+})
+
+
+socket.on("roomdata",function({room,users})
+{
+    const html=Mustache.render(sidebartemplate,
+        {
+            room:room,
+            users:users
+        })
+    sidebar.innerHTML=html;
 })
 
 messageform.addEventListener("submit",function(event)
@@ -68,3 +88,32 @@ sendlocationbutton.addEventListener("click",function()
     }
         
 })
+
+socket.emit("join",{username,room},function(error)
+{
+    if(error)
+    {
+        alert(error);
+        location.href="/";
+    }
+});
+
+
+var autoscroll=function()
+{
+    var newmessage=messages.lastElementChild;
+    var newmessgestyles=getComputedStyle(newmessage);
+    var messageheight=newmessage.offsetHeight+ parseInt(newmessgestyles.marginBottom);
+
+    var containerheight=messages.scrollHeight;
+    var scrooloffset=messages.offsetHeight + messages.scrollTop;  // visibleheight + scroolfromtop
+
+    if(containerheight - messageheight <=scrooloffset)
+    {
+        console.log(messages.scrollTop);
+        messages.scrollTop=messages.scrollHeight;
+        console.log(messages.scrollTop);
+    }
+
+}
+
