@@ -116,6 +116,28 @@ button:disabled {
 
 .message {
     margin-bottom: 16px;   
+    display: flex;
+    flex-direction: column;
+}
+
+.my-own-message 
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    margin-right: 100px;
+    color: #0070CC;
+    align-items: flex-end;
+}
+
+.admin-message 
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    margin-right: 100px;
+    color: #cca700;
+    align-items: center;
 }
 
 .message__name {
@@ -129,6 +151,16 @@ button:disabled {
     font-size: 14px;
 }
 
+.message__name__admin {
+    font-weight: 600;
+    font-size: 10px;
+    margin-right: 8px;
+}
+
+.message__meta__admin {
+    font-size: 10px;
+}
+
 .message a {
     color: #0070CC;
 }
@@ -138,11 +170,12 @@ button:disabled {
 .compose {
     display: flex;
     flex-shrink: 0;
-    margin-top: 16px;
+    margin-top: 2px;
     padding: 24px;
+    padding-top: 0px;
 }
 
-.compose form {
+.compose form{
     display: flex;
     flex-grow: 1;
     margin-right: 16px;

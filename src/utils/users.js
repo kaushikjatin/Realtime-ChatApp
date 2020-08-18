@@ -54,8 +54,7 @@ var getUser=function(id)
 
 var getUsersInRoom=function(room)
 {
-
-    room=room.trim().toLowerCase();
+    room=room.trim().toUpperCase();
     var usersinroom=users.filter(function(user)
     {
         return user.room===room;

@@ -10,7 +10,14 @@ const { generatemessage } = require('./src/utils/messages');
 
 const {addUser, removeUser, getUser, getUsersInRoom}=require("./src/utils/users");
 
+
 app.use(express.static('public'));
+
+app.get("/getinfo/",function(req,res){
+    res.sendFile(__dirname + '/public/chat.html');
+})
+
+
 
 io.on('connection',function(socket)
 {
@@ -26,7 +33,6 @@ io.on('connection',function(socket)
             socket.broadcast.to(user.room).emit("message","Admin",helperfunctions.generatemessage(user.username+" has joined the room"));
             io.to(user.room).emit("roomdata",
             {
-
                 room:user.room,
                 users:getUsersInRoom(user.room)
             })

@@ -5,20 +5,47 @@ var messageform=document.getElementById("message_form");
 var sendlocationbutton=document.getElementById("send-location")
 var locationmessagetemplate=document.getElementById('location-message-template').innerHTML;
 var messagetemplate=document.getElementById('message-template').innerHTML;
+var myownmessagetemplate=document.getElementById('my-own-message-template').innerHTML;
+var adminmessagetemplate=document.getElementById('admin-message-template').innerHTML;
 var messages=document.getElementById('messages');
 var sidebartemplate=document.getElementById('sidebar-template').innerHTML;
 var sidebar=document.getElementById('sidebar')
 
 var {username , room}=Qs.parse(location.search,{ignoreQueryPrefix:true});
 
-socket.on("message",function(username,message)
+socket.on("message",function(sendername,message)
 {
-    var html=Mustache.render(messagetemplate,
-        {
-            username:username,
-            message:message.text,
-            createdAt:moment(message.createdAt).format("hh:mm a")
-        })
+
+    var html;
+    if(username.trim().toLowerCase()===sendername)
+    {
+        html=Mustache.render(myownmessagetemplate,
+            {
+                username:"Myself",
+                message:message.text,
+                createdAt:moment(message.createdAt).format("hh:mm a")
+            })
+    }
+    else if(sendername.trim().toLowerCase()==='admin')
+    {
+        console.log("came here");
+        html=Mustache.render(adminmessagetemplate,
+            {
+                username:"Admin",
+                message:message.text,
+                createdAt:moment(message.createdAt).format("hh:mm a")
+            })
+    }
+    else 
+    {
+        html=Mustache.render(messagetemplate,
+            {
+                username:sendername,
+                message:message.text,
+                createdAt:moment(message.createdAt).format("hh:mm a")
+            })
+    }
+
     messages.insertAdjacentHTML('beforeend',html)
     autoscroll();
 })
@@ -44,6 +71,8 @@ socket.on("roomdata",function({room,users})
             room:room,
             users:users
         })
+
+    
     sidebar.innerHTML=html;
 })
 
