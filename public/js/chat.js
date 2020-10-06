@@ -11,7 +11,7 @@ var messages=document.getElementById('messages');
 var sidebartemplate=document.getElementById('sidebar-template').innerHTML;
 var sidebar=document.getElementById('sidebar')
 
-var {username , room}=Qs.parse(location.search,{ignoreQueryPrefix:true});
+var {username , room}=Qs.parse(location.search,{ignoreQueryPrefix:true}); // as this donot have concept of ockets so the data the URL is taken out by Qs.pare() and location.search9) refers to that data in URL.
 
 socket.on("message",function(sendername,message)
 {
@@ -71,7 +71,6 @@ socket.on("roomdata",function({room,users})
             room:room,
             users:users
         })
-
     
     sidebar.innerHTML=html;
 })
@@ -130,11 +129,15 @@ socket.emit("join",{username,room},function(error)
 
 var autoscroll=function()
 {
+    // offset height of any element return elementsize + padding + border...but not margin......so you can see that for finding the size
+    // of new element we will be explixitly adding th margin...
     var newmessage=messages.lastElementChild;
     var newmessgestyles=getComputedStyle(newmessage);
     var messageheight=newmessage.offsetHeight+ parseInt(newmessgestyles.marginBottom);
 
-    var containerheight=messages.scrollHeight;
+
+    // scrollheight property returns the elementsize + padding..but exclude the border,margin,scrollbrs etc......
+    var containerheight=messages.scrollHeight;// here scrollheight will give the sum of heights of all the messages in our DOM.
     var scrooloffset=messages.offsetHeight + messages.scrollTop;  // visibleheight + scroolfromtop
 
     if(containerheight - messageheight <=scrooloffset)
